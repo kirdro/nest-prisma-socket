@@ -41,7 +41,6 @@ export class EventsGateway {
 		messageData: IDataBodyCreateMessage,
 	) {
 		const { id, text } = messageData;
-		console.log('>>>>>>>>>>>>>>>>>>>>>>>>', id, text);
 		await this.messageService.createMessage({
 			text,
 			User: {
