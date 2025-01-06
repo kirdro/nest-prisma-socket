@@ -26,7 +26,11 @@ model User {
   role          Role      @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
+  messages      Message[]
   // hashedPassword String?
+
+  @@unique([id, image])
+  @@unique([id, image, name])
 }
 
 model Account {
@@ -70,6 +74,17 @@ model Post {
   userName    String
 
   @@index([name])
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  text      String
+  userImg   String?
+  userName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId, userImg, userName], references: [id, image, name])
+  userId    String?
 }
 
 enum Role {

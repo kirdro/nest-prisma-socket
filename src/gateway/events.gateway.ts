@@ -8,7 +8,8 @@ import { Server } from 'socket.io';
 import { UserService } from '../services/user.service';
 import { PostService } from '../services/post.service';
 import { Post as PostModel, User as UserModel } from '.prisma/client';
-import { IErr } from '../interfaces';
+import { IDataBodyCreateMessage, IErr } from '../interfaces';
+import { MessageService } from '../services/message.service';
 
 @WebSocketGateway({
 	cors: {
@@ -19,6 +20,7 @@ export class EventsGateway {
 	constructor(
 		private readonly userService: UserService,
 		private readonly postService: PostService,
+		private readonly messageService: MessageService,
 	) {}
 	@WebSocketServer()
 	server: Server;
@@ -31,6 +33,28 @@ export class EventsGateway {
 	@SubscribeMessage('getAllPosts')
 	async getAllPosts(): Promise<PostModel[]> {
 		return await this.postService.posts({});
+	}
+
+	@SubscribeMessage('createMessage')
+	async createMessage(
+		@MessageBody()
+		messageData: IDataBodyCreateMessage,
+	) {
+		const { id, text } = messageData;
+		await this.messageService.createMessage({
+			text,
+			userImg: {
+				connect: { id },
+			},
+			userName: {
+				connect: { id },
+			},
+			user: {
+				connect: { id },
+			},
+		});
+		const messages = await this.messageService.messages({});
+		this.server.emit('createMessage', messages);
 	}
 
 	@SubscribeMessage('createPost')
