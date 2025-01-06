@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 import { UserService } from '../services/user.service';
 import { PostService } from '../services/post.service';
 import { Post as PostModel, User as UserModel } from '.prisma/client';
-import { IDataBodyCreateMessage, IErr } from '../interfaces';
+import { IDataBodyCreateMessage, IErr, IMessage } from '../interfaces';
 import { MessageService } from '../services/message.service';
 
 @WebSocketGateway({
@@ -28,6 +28,11 @@ export class EventsGateway {
 	@SubscribeMessage('events')
 	async findAll(): Promise<UserModel[]> {
 		return await this.userService.users({});
+	}
+
+	@SubscribeMessage('getAllMessage')
+	async getAllMessage(): Promise<IMessage[]> {
+		return await this.messageService.messages({});
 	}
 
 	@SubscribeMessage('getAllPosts')
