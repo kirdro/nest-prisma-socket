@@ -31,7 +31,7 @@ export interface IMessage {
 export interface IParamsMessages {
 	skip?: number;
 	take?: number;
-	cursor?: MessageWhereUniqueInput;
+	cursor?: Prisma.MessageWhereUniqueInput;
 	where?: IMessageWhereInput;
 	orderBy?: IMessageOrderByWithRelationInput;
 }

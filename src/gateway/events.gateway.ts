@@ -43,13 +43,7 @@ export class EventsGateway {
 		const { id, text } = messageData;
 		await this.messageService.createMessage({
 			text,
-			userImg: {
-				connect: { id },
-			},
-			userName: {
-				connect: { id },
-			},
-			user: {
+			User: {
 				connect: { id },
 			},
 		});
