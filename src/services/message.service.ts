@@ -31,6 +31,7 @@ export class MessageService {
 		text: string;
 		User: { connect: { id: string } };
 	}): Promise<Message> {
+		console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<,', data);
 		return this.prisma.message.create({
 			data,
 		});
